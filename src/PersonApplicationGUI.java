@@ -25,7 +25,7 @@ public class PersonApplicationGUI extends JPanel implements KeyListener, ActionL
 		frame.setResizable(false);
 		
 		fileMenu = new JMenu("File");
-		helpMenu = new JMenu("Help");https://github.com/wrmf/personapplication
+		helpMenu = new JMenu("Help");
 		menuBar = new JMenuBar();
 		quitButton = new JMenuItem("Exit");
 		helpButton = new JMenuItem("Info");
@@ -46,7 +46,7 @@ public class PersonApplicationGUI extends JPanel implements KeyListener, ActionL
 		sourceButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				try {
-					Desktop.getDesktop().browse(new URL("http://www.google.com").toURI());
+					Desktop.getDesktop().browse(new URL("https://github.com/wrmf/PersonApplication").toURI());
 				} catch (MalformedURLException e1) {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
