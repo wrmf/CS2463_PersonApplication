@@ -2,17 +2,23 @@ import java.awt.*;
 import java.awt.event.*;
 import java.io.*;
 import java.net.*;
+import java.util.*;
+
 import javax.swing.*;
 
 public class PersonApplicationGUI extends JPanel implements KeyListener, ActionListener{
 	private static final int WIDTH = 1200;
 	private static final int HEIGHT = 800;
-	JPanel northPanel = new JPanel();
-	private JMenuItem quitButton, helpButton, sourceButton, newButton, saveButton, saveAsButton, saveChangesButton, openButton;
-	JFrame frame = new JFrame();
-	JFrame helpFrame = new JFrame();
-	private JMenu fileMenu, helpMenu;
+	private JPanel northPanel = new JPanel(); //Remove later idk?
+	private JMenuItem quitButton, helpButton, sourceButton, newFileButton, newPersonButton, newRPersonButton, 
+	newOPersonButton, saveButton, saveAsButton, saveChangesButton, openButton, cancelButton;
+	private JFrame frame = new JFrame();
+	private JMenu fileMenu, helpMenu, newMenu;
 	private JMenuBar menuBar;
+	private ArrayList<Person> personList = new ArrayList<Person>();
+	private ArrayList<RegisteredPerson> rPersonList = new ArrayList<RegisteredPerson>();
+	private ArrayList<OCCCPerson> oPersonList = new ArrayList<OCCCPerson>();
+	
 	
 	
 	public PersonApplicationGUI() {
@@ -20,21 +26,28 @@ public class PersonApplicationGUI extends JPanel implements KeyListener, ActionL
 		frame.setTitle("Person Application GUI");
 		frame.setSize(WIDTH, HEIGHT);
 		frame.setDefaultCloseOperation(frame.EXIT_ON_CLOSE);
-		frame.setResizable(false);
 		
 		fileMenu = new JMenu("File");
+		newMenu = new JMenu("New");
 		helpMenu = new JMenu("Help");
 		menuBar = new JMenuBar();
 		quitButton = new JMenuItem("Exit");
 		helpButton = new JMenuItem("Info");
-		newButton = new JMenuItem("New");
+		newFileButton = new JMenuItem("File");
+		newPersonButton = new JMenuItem("Person");
+		newRPersonButton = new JMenuItem("RegisteredPerson");
+		newOPersonButton = new JMenuItem("OCCCPerson");
 		saveButton = new JMenuItem("Save");
 		saveAsButton = new JMenuItem("Save As");
 		openButton = new JMenuItem("Open");
 		sourceButton = new JMenuItem("Source");
 		
 		//Add buttons to menus
-		fileMenu.add(newButton);
+		newMenu.add(newFileButton);
+		newMenu.add(newPersonButton);
+		newMenu.add(newRPersonButton);
+		newMenu.add(newOPersonButton);
+		fileMenu.add(newMenu);
 		fileMenu.add(openButton);
 		fileMenu.add(saveButton);
 		fileMenu.add(saveAsButton);
