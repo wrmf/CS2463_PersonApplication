@@ -27,6 +27,13 @@ public class OCCCPerson extends RegisteredPerson {
 	}
 	
 	/***
+	 * Create new OCCCPerson from scratch
+	 */
+	public OCCCPerson(String firstName, String lastName, OCCCDate dob, String govID, String studentID) {
+		super(firstName, lastName, dob, govID);
+		this.studentID = studentID;
+	}
+	/***
 	 * Get student ID
 	 * @return student ID
 	 */
@@ -76,6 +83,10 @@ public class OCCCPerson extends RegisteredPerson {
 	 * Converts person information to string
 	 */
 	public String toString() {
-		return super.toString()+", "+studentID;
+		if(studentID == "null") {
+			return super.toString();
+		} else {
+			return super.toString()+", "+studentID;
+		}
 	}
 }

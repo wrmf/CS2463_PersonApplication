@@ -9,12 +9,14 @@ import java.io.*;
 import java.net.*;
 import java.util.*;
 import javax.swing.*;
+import javax.swing.filechooser.FileNameExtensionFilter;
+
 import java.time.LocalDate;
 
 
 public class PersonApplicationGUI implements ActionListener{
-	private static final int WIDTH = 1200;
-	private static final int HEIGHT = 800;
+	private static final int WIDTH = 600;
+	private static final int HEIGHT = 600;
 	private JPanel northPanel = new JPanel();
 	private JPanel middlePanel = new JPanel();
 	private JPanel southPanel = new JPanel();
@@ -23,22 +25,26 @@ public class PersonApplicationGUI implements ActionListener{
 	private JFrame frame = new JFrame();
 	private JMenu fileMenu, helpMenu;
 	private JMenuBar menuBar;
-	private ArrayList<Person> personList = new ArrayList<Person>();
-	private ArrayList<RegisteredPerson> rPersonList = new ArrayList<RegisteredPerson>();
-	private ArrayList<OCCCPerson> oPersonList = new ArrayList<OCCCPerson>();
+	private ArrayList<OCCCPerson> personList = new ArrayList<OCCCPerson>();
 	private OCCCDate odate = new OCCCDate();
 	private Person person = new Person("John", "Doe", odate); //Blank person
-	private RegisteredPerson RPerson = new RegisteredPerson(person, "0"); //Blank rperson
-	private OCCCPerson OPerson = new OCCCPerson(RPerson, "0"); //Blank operson
-	private JTextField firstNameField = new JTextField("Enter first name");
-	private JTextField lastNameField = new JTextField("Enter last name");
-	private JTextField birthdateField = new JTextField("Enter birthdate (mm/dd/yyyy)");
-	private JTextField govIDField = new JTextField("Enter government ID number");
-	private JTextField OCCCIDField = new JTextField("Enter OCCC ID number");
+	private RegisteredPerson RPerson = new RegisteredPerson(person, "null"); //Blank rperson
+	private OCCCPerson OPerson = new OCCCPerson(RPerson, "null"); //Blank operson
+	private JLabel firstNameLabel = new JLabel("Enter first name:");
+	private JTextField firstNameField = new JTextField();
+	private JLabel lastNameLabel = new JLabel("Enter last name:");
+	private JTextField lastNameField = new JTextField();
+	private JLabel birthdateLabel = new JLabel("Enter birthdate (mm/dd/yyyy):");
+	private JTextField birthdateField = new JTextField();
+	private JLabel govIDLabel = new JLabel("Enter government ID number:");
+	private JTextField govIDField = new JTextField();
+	private JLabel OCCCIDLabel = new JLabel("Enter OCCC ID number:");
+	private JTextField OCCCIDField = new JTextField();
 	private JRadioButton personButton = new JRadioButton("Person", true);
 	private JRadioButton rPersonButton = new JRadioButton("RegisteredPerson");
 	private JRadioButton oPersonButton = new JRadioButton("OCCCPerson");
 	private ButtonGroup buttonGroup = new ButtonGroup();
+	private String fileName;
 	
 	
 	public static void main(String[] args) {
@@ -68,7 +74,7 @@ public class PersonApplicationGUI implements ActionListener{
 		
 		northPanel.setLayout(new FlowLayout());
 		frame.add(northPanel, BorderLayout.NORTH);
-		middlePanel.setLayout(new FlowLayout());
+		middlePanel.setLayout(new GridLayout(5, 2));
 		frame.add(middlePanel, BorderLayout.CENTER);
 		southPanel.setLayout(new FlowLayout());
 		frame.add(southPanel, BorderLayout.SOUTH);
@@ -80,11 +86,18 @@ public class PersonApplicationGUI implements ActionListener{
 		northPanel.add(personButton);
 		northPanel.add(rPersonButton);
 		northPanel.add(oPersonButton);
+		
+		middlePanel.add(firstNameLabel);
 		middlePanel.add(firstNameField);
+		middlePanel.add(lastNameLabel);
 		middlePanel.add(lastNameField);
+		middlePanel.add(birthdateLabel);
 		middlePanel.add(birthdateField);
+		middlePanel.add(govIDLabel);
 		middlePanel.add(govIDField);
+		middlePanel.add(OCCCIDLabel);
 		middlePanel.add(OCCCIDField);
+		
 		southPanel.add(cancelButton);
 		southPanel.add(saveChangesButton);
 		
@@ -142,57 +155,76 @@ public class PersonApplicationGUI implements ActionListener{
 			}
 		});
 
-		//Help button gives some amount of help
+		//Save button
 		saveChangesButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				
-				OCCCDate oDate2;
+				OCCCDate oDate;
 				
 				if(isValidDate(birthdateField.getText())) {
 					String[] stringArray = birthdateField.getText().split("/");
 					System.out.println(stringArray[0]);
 					System.out.println(stringArray[1]);
 					System.out.println(stringArray[2]);
-					oDate2 = new OCCCDate(Integer.valueOf(stringArray[1]), Integer.valueOf(stringArray[0]), 
+					oDate = new OCCCDate(Integer.valueOf(stringArray[1]), Integer.valueOf(stringArray[0]), 
 							Integer.valueOf(stringArray[2]));
+					if(personButton.isSelected()) {
+						personList.add(new OCCCPerson(firstNameField.getText(), lastNameField.getText(), oDate,
+								"null", "null"));
+					} else if(rPersonButton.isSelected()) {
+						personList.add(new OCCCPerson(firstNameField.getText(), lastNameField.getText(), oDate,
+								govIDField.getText(), "null"));
+					} else if(oPersonButton.isSelected()) {
+						personList.add(new OCCCPerson(firstNameField.getText(), lastNameField.getText(), oDate,
+								govIDField.getText(), OCCCIDField.getText()));
+						
+						try{
+						    ObjectOutputStream objectOutputStream = new ObjectOutputStream(new FileOutputStream(fileName+".dat", false)); 
+
+						    objectOutputStream.writeObject(personList);
+						    objectOutputStream.close();
+
+						} catch (IOException b) {
+						    b.printStackTrace();
+						}
+					}
 				} else {
-					oDate2 = new OCCCDate();
-				}
-				
-				if(personButton.isSelected()) {
-					personList.add(person);
-					personList.get(personList.size()-1).setFirstName(firstNameField.getText());
-					personList.get(personList.size()-1).setLastName(lastNameField.getText());
-					personList.get(personList.size()-1).setDOB(oDate2);
-					System.out.println(personList.get(personList.size()-1).toString());
-				} else if(rPersonButton.isSelected()) {
-					rPersonList.add(RPerson);
-					rPersonList.get(rPersonList.size()-1).setFirstName(firstNameField.getText());
-					rPersonList.get(rPersonList.size()-1).setLastName(lastNameField.getText());
-					rPersonList.get(rPersonList.size()-1).setGovernmentID(govIDField.getText());
-					rPersonList.get(rPersonList.size()-1).setDOB(oDate2);
-					System.out.println(rPersonList.get(rPersonList.size()-1).toString());
-				} else if(oPersonButton.isSelected()) {
-					oPersonList.add(OPerson);
-					oPersonList.get(oPersonList.size()-1).setFirstName(firstNameField.getText());
-					oPersonList.get(oPersonList.size()-1).setLastName(lastNameField.getText());
-					oPersonList.get(oPersonList.size()-1).setGovernmentID(govIDField.getText());
-					oPersonList.get(oPersonList.size()-1).setStudentID(OCCCIDField.getText());
-					oPersonList.get(oPersonList.size()-1).setDOB(oDate2);
-					System.out.println(oPersonList.get(oPersonList.size()-1).toString());
-				}
-				
-				
+					JOptionPane.showMessageDialog(null, "You entered an invalid date, try again in mm/dd/yyyy format","Error", JOptionPane.ERROR_MESSAGE);
+				}				
 			}
 		});	
 		
+		//Open file button
+		openButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				JFileChooser fileChooser = new JFileChooser();
+				FileNameExtensionFilter filter = new FileNameExtensionFilter("Supported file types","txt");
+				fileChooser.setFileFilter(filter);
+			    int returnVal = fileChooser.showOpenDialog(frame);
+			    if(returnVal == JFileChooser.APPROVE_OPTION) {
+			       fileName = fileChooser.getSelectedFile().getName();
+			    }
+			}
+		});	
+		
+		//Save button
+		saveButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				try{
+				    ObjectOutputStream objectOutputStream = new ObjectOutputStream(new FileOutputStream(fileName+".dat", false)); 
+
+				    objectOutputStream.writeObject(personList);
+				    objectOutputStream.close();
+
+				} catch (IOException b) {
+				    b.printStackTrace();
+				}
+			}
+		});	
+				
 		frame.setJMenuBar(menuBar);
         frame.setVisible(true);
-        firstNameField.selectAll();
-		lastNameField.selectAll();
-		birthdateField.selectAll();
-		govIDField.selectAll();
-		OCCCIDField.selectAll();
+        
 	}
 
 	/**
@@ -209,6 +241,7 @@ public class PersonApplicationGUI implements ActionListener{
 		for(int i = 0; i < charArray.length; i ++) {
 			charArray[i] = s.charAt(i);
 		}
+		
 		
 		if(Character.isDigit(charArray[0]) && Character.isDigit(charArray[1]) && isChar(charArray[2], '/') && 
 				Character.isDigit(charArray[3]) && Character.isDigit(charArray[4]) && isChar(charArray[5], '/') && 

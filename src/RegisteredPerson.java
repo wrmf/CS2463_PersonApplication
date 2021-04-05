@@ -78,6 +78,10 @@ public class RegisteredPerson extends Person {
 	 * Return string of person's information
 	 */
 	public String toString() {
-		return super.toString()+", "+govID;
+		if(govID == "null") {
+			return super.toString();
+		} else {
+			return super.toString()+", "+govID;
+		}
 	}
 }

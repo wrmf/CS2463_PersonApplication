@@ -4,11 +4,12 @@
  *
  */
 
+import java.io.Serializable;
 import java.text.DateFormatSymbols;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 
-public class OCCCDate {
+public class OCCCDate implements Serializable {
 	private int dayOfMonth;
 	private int monthOfYear;
 	private int year;
