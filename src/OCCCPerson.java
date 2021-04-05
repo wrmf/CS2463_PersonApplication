@@ -35,6 +35,14 @@ public class OCCCPerson extends RegisteredPerson {
 	}
 	
 	/***
+	 * Set student ID
+	 * @param studentID inputID
+	 */
+	public void setStudentID(String studentID) {
+		this.studentID = studentID;
+	}
+	
+	/***
 	 * Checks if one OCCCPerson is equal to another
 	 * @param p input person
 	 * @return true if yes, false if no

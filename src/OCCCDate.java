@@ -14,8 +14,8 @@ public class OCCCDate {
 	private int year;
 	private GregorianCalendar gc;
 	private boolean dateFormat = true; //True for US, false for European
-	private boolean dateStyle = true; //True for month names, false for not
-	private boolean dateDayName = true; //True for day names, false for not
+	private boolean dateStyle = false; //True for month names, false for not
+	private boolean dateDayName = false; //True for day names, false for not
 	
 	public static final boolean FORMAT_US = true;
 	public static final boolean FORMAT_EURO = false;
@@ -27,7 +27,7 @@ public class OCCCDate {
 	public OCCCDate() {
 		gc = new GregorianCalendar();
 		dayOfMonth = gc.get(Calendar.DAY_OF_MONTH);
-		monthOfYear = (gc.get(Calendar.MONTH));
+		monthOfYear = (gc.get(Calendar.MONTH))+1;
 		year = gc.get(Calendar.YEAR);
 	}
 	

@@ -45,6 +45,14 @@ public class RegisteredPerson extends Person {
 	}
 	
 	/***
+	 * Sets the government ID
+	 * @param govID the input id
+	 */
+	public void setGovernmentID(String govID) {
+		this.govID = govID;
+	}
+	
+	/***
 	 * Check if two people are equal from a RegisteredPerson
 	 * @param p input RegisteredPerson
 	 * @return true if equal, false if not
