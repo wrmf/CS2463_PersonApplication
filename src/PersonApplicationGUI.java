@@ -203,17 +203,17 @@ public class PersonApplicationGUI implements ActionListener{
 						personList.add(new OCCCPerson("null", "null", oDate, "null", "null"));
 					}
 					if(personButton.isSelected()) {
-						personList.get(numInList+1).setFirstName(firstNameField.getText());
-						personList.get(numInList+1).setLastName(lastNameField.getText());
+						personList.get(numInList).setFirstName(firstNameField.getText());
+						personList.get(numInList).setLastName(lastNameField.getText());
 					} else if(rPersonButton.isSelected()) {
-						personList.get(numInList+1).setFirstName(firstNameField.getText());
-						personList.get(numInList+1).setLastName(lastNameField.getText());
-						personList.get(numInList+1).setGovernmentID(govIDField.getText());
+						personList.get(numInList).setFirstName(firstNameField.getText());
+						personList.get(numInList).setLastName(lastNameField.getText());
+						personList.get(numInList).setGovernmentID(govIDField.getText());
 					} else if(oPersonButton.isSelected()) {
-						personList.get(numInList+1).setFirstName(firstNameField.getText());
-						personList.get(numInList+1).setLastName(lastNameField.getText());
-						personList.get(numInList+1).setGovernmentID(govIDField.getText());
-						personList.get(numInList+1).setStudentID(OCCCIDField.getText());
+						personList.get(numInList).setFirstName(firstNameField.getText());
+						personList.get(numInList).setLastName(lastNameField.getText());
+						personList.get(numInList).setGovernmentID(govIDField.getText());
+						personList.get(numInList).setStudentID(OCCCIDField.getText());
 					}
 					
 					try{
