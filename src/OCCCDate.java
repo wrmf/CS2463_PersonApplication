@@ -77,6 +77,7 @@ public class OCCCDate implements Serializable {
 	 */
 	public int getMonthNumber() {
 		return monthOfYear;
+		
 	}
 	
 	/***
@@ -212,15 +213,15 @@ public class OCCCDate implements Serializable {
 					return getMonthName()+"/"+getDayName()+" "+getDayOfMonth()+"/"+String.valueOf(year);
 				}
 				else {
-					return getMonthName()+"/"+String.valueOf(dayOfMonth)+"/"+String.valueOf(year);
+					return getMonthName()+"/"+String.valueOf(this.getDayOfMonth())+"/"+String.valueOf(year);
 				}
 			}
 			else {
 				if(dateDayName == true) {
-					return String.valueOf(monthOfYear)+"/"+getDayName()+" "+getDayOfMonth()+"/"+String.valueOf(year);
+					return String.valueOf(getMonthNumber())+"/"+getDayName()+" "+getDayOfMonth()+"/"+String.valueOf(year);
 				}
 				else {
-					return String.valueOf(monthOfYear)+"/"+String.valueOf(dayOfMonth)+"/"+String.valueOf(year);
+					return String.valueOf(getMonthNumber())+"/"+String.valueOf(getDayOfMonth())+"/"+String.valueOf(year);
 				}
 			}
 		}
@@ -230,15 +231,15 @@ public class OCCCDate implements Serializable {
 					return getDayName()+" "+getDayOfMonth()+"/"+getMonthName()+"/"+String.valueOf(year);
 				}
 				else {
-					return String.valueOf(dayOfMonth)+"/"+getMonthName()+"/"+String.valueOf(year);
+					return String.valueOf(getDayOfMonth())+"/"+getMonthName()+"/"+String.valueOf(year);
 				}
 			}
 			else {
 				if(dateDayName == true) {
-					return getDayName()+" "+getDayOfMonth()+"/"+String.valueOf(monthOfYear)+"/"+String.valueOf(year);
+					return getDayName()+" "+getDayOfMonth()+"/"+String.valueOf(getMonthNumber())+"/"+String.valueOf(year);
 				}
 				else {
-					return String.valueOf(dayOfMonth)+"/"+String.valueOf(monthOfYear)+"/"+String.valueOf(year);
+					return String.valueOf(getDayOfMonth())+"/"+String.valueOf(getMonthNumber())+"/"+String.valueOf(year);
 				}
 			}
 		}

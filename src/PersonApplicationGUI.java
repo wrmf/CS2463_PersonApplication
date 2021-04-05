@@ -143,6 +143,8 @@ public class PersonApplicationGUI implements ActionListener{
 		            firstNameField.setText(personList.get(numInList).getFirstName());
 					lastNameField.setText(personList.get(numInList).getLastName());
 					birthdateField.setText((personList.get(numInList).getDOBString()));
+					govIDField.setText(null);
+					OCCCIDField.setText(null);
 					if(!personList.get(numInList).getGovernmentID().equalsIgnoreCase("null")) {
 						rPersonButton.setSelected(true);
 						govIDField.setText(personList.get(numInList).getGovernmentID());
