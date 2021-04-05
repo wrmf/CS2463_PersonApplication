@@ -41,7 +41,9 @@ public class PersonApplicationGUI implements ActionListener{
 	private ButtonGroup buttonGroup = new ButtonGroup();
 	
 	
-	
+	public static void main(String[] args) {
+		PersonApplicationGUI idk = new PersonApplicationGUI();
+	}
 	
 	public PersonApplicationGUI() {
 		
@@ -143,6 +145,7 @@ public class PersonApplicationGUI implements ActionListener{
 		//Help button gives some amount of help
 		saveChangesButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				isValidDate(birthdateField.getText());
 				if(personButton.isSelected()) {
 					personList.add(person);
 					personList.get(personList.size()-1).setFirstName(firstNameField.getText());
@@ -162,6 +165,8 @@ public class PersonApplicationGUI implements ActionListener{
 					oPersonList.get(oPersonList.size()-1).setStudentID(OCCCIDField.getText());
 					System.out.println(oPersonList.get(oPersonList.size()-1).toString());
 				}
+				
+				
 			}
 		});
 		
@@ -195,7 +200,11 @@ public class PersonApplicationGUI implements ActionListener{
 		OCCCIDField.selectAll();
 	}
 
-	
+	/**
+	 * Check if input string is a valid date in mm/dd/yyyy format. DOES NOT HANDLE WRAPPING
+	 * @param s input string
+	 * @return true if valid, false if not
+	 */
 	private boolean isValidDate(String s) {
 		if(s.length() != 10) {
 			return false;
@@ -206,13 +215,21 @@ public class PersonApplicationGUI implements ActionListener{
 			charArray[i] = s.charAt(i);
 		}
 		
-		if()
+		if(Character.isDigit(charArray[0]) && Character.isDigit(charArray[1]) && isChar(charArray[2], '/') && 
+				Character.isDigit(charArray[3]) && Character.isDigit(charArray[4]) && isChar(charArray[5], '/') && 
+				Character.isDigit(charArray[6]) && Character.isDigit(charArray[7]) && Character.isDigit(charArray[8]) && 
+				Character.isDigit(charArray[9])) {
+			return true;
+		}
+		return false;
 	}
 	
-	private boolean isNumber(char c) {
-		return Character.isDigit(c);
-	}
-	
+	/***
+	 * Checks if input char is equal to another input char
+	 * @param input char to be checked
+	 * @param c char to be checked against
+	 * @return true if equal, false if not
+	 */
 	private boolean isChar(char input, char c) {
 		if(input == c) {
 			return true;

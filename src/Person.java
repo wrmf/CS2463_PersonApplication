@@ -63,6 +63,10 @@ public class Person {
 		return this.dob;
 	}
 	
+	public void setDOB(OCCCDate dob) {
+		this.dob = dob;
+	}
+	
 	public String toString() {
 		return lastName+", "+firstName+" ("+dob.toString()+")";
 	}
