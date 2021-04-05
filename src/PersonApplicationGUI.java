@@ -63,6 +63,7 @@ public class PersonApplicationGUI implements ActionListener{
 		//Initialize OCCCDate
 		odate.setDayName(odate.HIDE_DAY_NAME);
 		odate.setStyleFormat(odate.STYLE_NUMBERS);
+		odate.setDateFormat(odate.FORMAT_US);
 		
 		//Initialize everything else
 		fileMenu = new JMenu("File");
@@ -139,7 +140,7 @@ public class PersonApplicationGUI implements ActionListener{
 		
 		JList.addMouseListener(new MouseAdapter() {
 		    public void mouseClicked(MouseEvent e) {
-		        if (e.getClickCount() == 2) {
+		        if (e.getClickCount() == 1) {
 		        	personButton.setSelected(true);
 		            numInList = JList.locationToIndex(e.getPoint());
 		            firstNameField.setText(personList.get(numInList).getFirstName());

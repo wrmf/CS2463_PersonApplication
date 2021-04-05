@@ -66,7 +66,7 @@ public class Person implements Serializable {
 	}
 	
 	public String getDOBString() {
-		return dob.getDayOfMonth()+"/"+dob.getMonthNumber()+"/"+dob.getYear();
+		return dob.getMonthNumber()+"/"+dob.getDayOfMonth()+"/"+dob.getYear();
 	}
 	
 	public void setDOB(OCCCDate dob) {
