@@ -21,7 +21,7 @@ public class PersonApplicationGUI implements ActionListener{
 	private JPanel middlePanel = new JPanel();
 	private JPanel southPanel = new JPanel();
 	private JPanel westPanel = new JPanel();
-	private JButton saveChangesButton, cancelButton;
+	private JButton saveChangesButton, cancelButton, deletePersonButton;
 	private JMenuItem quitButton, helpButton, sourceButton, newFileButton, saveButton, saveAsButton, openButton;
 	private JFrame frame = new JFrame();
 	private JMenu fileMenu, helpMenu;
@@ -76,6 +76,7 @@ public class PersonApplicationGUI implements ActionListener{
 		openButton = new JMenuItem("Open");
 		sourceButton = new JMenuItem("Source");
 		saveChangesButton   = new JButton("Save Changes");
+		deletePersonButton   = new JButton("Delete Person");
 	    cancelButton = new JButton("Discard Changes");
 	    
 	    model.addElement("                                                                                 ");
@@ -118,6 +119,7 @@ public class PersonApplicationGUI implements ActionListener{
 		middlePanel.add(OCCCIDField);
 		
 		//South panel
+		southPanel.add(deletePersonButton);
 		southPanel.add(cancelButton);
 		southPanel.add(saveChangesButton);
 		
@@ -155,6 +157,24 @@ public class PersonApplicationGUI implements ActionListener{
 					
 					
 		        } 
+		    }
+		});
+		
+		deletePersonButton.addMouseListener(new MouseAdapter() {
+		    public void mouseClicked(MouseEvent e) {
+	        	personList.remove(numInList);
+	        	numInList = personList.size();
+	        	model.clear();
+				for(int i = 0; i < personList.size(); i ++) {
+					model.addElement(personList.get(i).toString());
+				}
+				JList.setModel(model);
+				
+				firstNameField.setText(null);
+				lastNameField.setText(null);
+				birthdateField.setText(null);
+				govIDField.setText(null);
+				OCCCIDField.setText(null);
 		    }
 		});
 		
