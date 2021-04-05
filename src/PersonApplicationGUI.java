@@ -145,17 +145,32 @@ public class PersonApplicationGUI implements ActionListener{
 		//Help button gives some amount of help
 		saveChangesButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				isValidDate(birthdateField.getText());
+				
+				OCCCDate oDate2;
+				
+				if(isValidDate(birthdateField.getText())) {
+					String[] stringArray = birthdateField.getText().split("/");
+					System.out.println(stringArray[0]);
+					System.out.println(stringArray[1]);
+					System.out.println(stringArray[2]);
+					oDate2 = new OCCCDate(Integer.valueOf(stringArray[1]), Integer.valueOf(stringArray[0]), 
+							Integer.valueOf(stringArray[2]));
+				} else {
+					oDate2 = new OCCCDate();
+				}
+				
 				if(personButton.isSelected()) {
 					personList.add(person);
 					personList.get(personList.size()-1).setFirstName(firstNameField.getText());
 					personList.get(personList.size()-1).setLastName(lastNameField.getText());
+					personList.get(personList.size()-1).setDOB(oDate2);
 					System.out.println(personList.get(personList.size()-1).toString());
 				} else if(rPersonButton.isSelected()) {
 					rPersonList.add(RPerson);
 					rPersonList.get(rPersonList.size()-1).setFirstName(firstNameField.getText());
 					rPersonList.get(rPersonList.size()-1).setLastName(lastNameField.getText());
 					rPersonList.get(rPersonList.size()-1).setGovernmentID(govIDField.getText());
+					rPersonList.get(rPersonList.size()-1).setDOB(oDate2);
 					System.out.println(rPersonList.get(rPersonList.size()-1).toString());
 				} else if(oPersonButton.isSelected()) {
 					oPersonList.add(OPerson);
@@ -163,33 +178,13 @@ public class PersonApplicationGUI implements ActionListener{
 					oPersonList.get(oPersonList.size()-1).setLastName(lastNameField.getText());
 					oPersonList.get(oPersonList.size()-1).setGovernmentID(govIDField.getText());
 					oPersonList.get(oPersonList.size()-1).setStudentID(OCCCIDField.getText());
+					oPersonList.get(oPersonList.size()-1).setDOB(oDate2);
 					System.out.println(oPersonList.get(oPersonList.size()-1).toString());
 				}
 				
 				
 			}
-		});
-		
-		//Help button gives some amount of help
-		/*newPersonButton.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				firstNameNote.setVisible(true);
-				lastNameNote.setVisible(true);
-				birthdateNote.setVisible(true);
-				govIDNote.setVisible(false);
-				OCCCIDNote.setVisible(false);
-				personList.add(person);
-				//Help button gives some amount of help
-				saveChangesButton.addActionListener(new ActionListener() {
-					public void actionPerformed(ActionEvent e) {
-						personList.get(personList.size()-1).setFirstName(firstNameNote.getText());
-						personList.get(personList.size()-1).setLastName(lastNameNote.getText());
-						System.out.println(personList.get(personList.size()-1).toString());
-					}
-				});
-			}
-		});*/
-		
+		});	
 		
 		frame.setJMenuBar(menuBar);
         frame.setVisible(true);
