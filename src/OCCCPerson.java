@@ -83,7 +83,7 @@ public class OCCCPerson extends RegisteredPerson {
 	 * Converts person information to string
 	 */
 	public String toString() {
-		if(studentID == "null") {
+		if(studentID.equalsIgnoreCase("null")) {
 			return super.toString();
 		} else {
 			return super.toString()+", "+studentID;

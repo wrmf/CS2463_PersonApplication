@@ -15,11 +15,12 @@ import java.time.LocalDate;
 
 
 public class PersonApplicationGUI implements ActionListener{
-	private static final int WIDTH = 600;
+	private static final int WIDTH = 1000;
 	private static final int HEIGHT = 600;
 	private JPanel northPanel = new JPanel();
 	private JPanel middlePanel = new JPanel();
 	private JPanel southPanel = new JPanel();
+	private JPanel westPanel = new JPanel();
 	private JButton saveChangesButton, cancelButton;
 	private JMenuItem quitButton, helpButton, sourceButton, newFileButton, saveButton, saveAsButton, openButton;
 	private JFrame frame = new JFrame();
@@ -27,9 +28,6 @@ public class PersonApplicationGUI implements ActionListener{
 	private JMenuBar menuBar;
 	private ArrayList<OCCCPerson> personList = new ArrayList<OCCCPerson>();
 	private OCCCDate odate = new OCCCDate();
-	private Person person = new Person("John", "Doe", odate); //Blank person
-	private RegisteredPerson RPerson = new RegisteredPerson(person, "null"); //Blank rperson
-	private OCCCPerson OPerson = new OCCCPerson(RPerson, "null"); //Blank operson
 	private JLabel firstNameLabel = new JLabel("Enter first name:");
 	private JTextField firstNameField = new JTextField();
 	private JLabel lastNameLabel = new JLabel("Enter last name:");
@@ -44,21 +42,29 @@ public class PersonApplicationGUI implements ActionListener{
 	private JRadioButton rPersonButton = new JRadioButton("RegisteredPerson");
 	private JRadioButton oPersonButton = new JRadioButton("OCCCPerson");
 	private ButtonGroup buttonGroup = new ButtonGroup();
-	private String fileName;
+	private String fileName = "output";
+	private JScrollPane scrollPane;
+	private JList<String> JList;
+	private DefaultListModel<String> model = new DefaultListModel<String>();
+	private int numInList;
 	
 	
 	public static void main(String[] args) {
-		PersonApplicationGUI idk = new PersonApplicationGUI();
+		PersonApplicationGUI paGUI = new PersonApplicationGUI();
 	}
 	
 	public PersonApplicationGUI() {
 		
+		//Initialize JFrame
 		frame.setTitle("Person Application GUI");
 		frame.setSize(WIDTH, HEIGHT);
 		frame.setDefaultCloseOperation(frame.EXIT_ON_CLOSE);
+		
+		//Initialize OCCCDate
 		odate.setDayName(odate.HIDE_DAY_NAME);
 		odate.setStyleFormat(odate.STYLE_NUMBERS);
 		
+		//Initialize everything else
 		fileMenu = new JMenu("File");
 		helpMenu = new JMenu("Help");
 		menuBar = new JMenuBar();
@@ -71,22 +77,35 @@ public class PersonApplicationGUI implements ActionListener{
 		sourceButton = new JMenuItem("Source");
 		saveChangesButton   = new JButton("Save Changes");
 	    cancelButton = new JButton("Discard Changes");
+	    
+	    model.addElement("                                                                                 ");
+	    JList = new JList<String>(model);
+	    scrollPane = new JScrollPane();
+	    scrollPane.setViewportView(JList);
+	    JList.setLayoutOrientation(JList.VERTICAL);
+	    westPanel.add(scrollPane);
 		
+	    //Create panels
 		northPanel.setLayout(new FlowLayout());
 		frame.add(northPanel, BorderLayout.NORTH);
 		middlePanel.setLayout(new GridLayout(5, 2));
 		frame.add(middlePanel, BorderLayout.CENTER);
 		southPanel.setLayout(new FlowLayout());
 		frame.add(southPanel, BorderLayout.SOUTH);
+		westPanel.setLayout(new FlowLayout());
+		frame.add(westPanel, BorderLayout.WEST);
 		
+		//Create button group
 		buttonGroup.add(personButton);
 		buttonGroup.add(rPersonButton);
 		buttonGroup.add(oPersonButton);
 		
+		//North panel
 		northPanel.add(personButton);
 		northPanel.add(rPersonButton);
 		northPanel.add(oPersonButton);
 		
+		//Middle panel
 		middlePanel.add(firstNameLabel);
 		middlePanel.add(firstNameField);
 		middlePanel.add(lastNameLabel);
@@ -98,10 +117,9 @@ public class PersonApplicationGUI implements ActionListener{
 		middlePanel.add(OCCCIDLabel);
 		middlePanel.add(OCCCIDField);
 		
+		//South panel
 		southPanel.add(cancelButton);
 		southPanel.add(saveChangesButton);
-		
-		
 		
 		//Add buttons to menus
 		fileMenu.add(newFileButton);
@@ -117,11 +135,26 @@ public class PersonApplicationGUI implements ActionListener{
 		menuBar.add(fileMenu);
 		menuBar.add(helpMenu);
 		
-		firstNameField.selectAll();
-		lastNameField.selectAll();
-		birthdateField.selectAll();
-		govIDField.selectAll();
-		OCCCIDField.selectAll();
+		JList.addMouseListener(new MouseAdapter() {
+		    public void mouseClicked(MouseEvent e) {
+		        if (e.getClickCount() == 2) {
+		        	personButton.setSelected(true);
+		            numInList = JList.locationToIndex(e.getPoint());
+		            firstNameField.setText(personList.get(numInList).getFirstName());
+					lastNameField.setText(personList.get(numInList).getLastName());
+					birthdateField.setText((personList.get(numInList).getDOBString()));
+					if(!personList.get(numInList).getGovernmentID().equalsIgnoreCase("null")) {
+						rPersonButton.setSelected(true);
+						govIDField.setText(personList.get(numInList).getGovernmentID());
+					} if(!personList.get(numInList).getStudentID().equalsIgnoreCase("null")) {
+						OCCCIDField.setText(personList.get(numInList).getStudentID());
+						oPersonButton.setSelected(true);
+					}
+					
+					
+		        } 
+		    }
+		});
 		
 		//Quit button closes program/gui
 		quitButton.addActionListener(new ActionListener() {
@@ -163,47 +196,124 @@ public class PersonApplicationGUI implements ActionListener{
 				
 				if(isValidDate(birthdateField.getText())) {
 					String[] stringArray = birthdateField.getText().split("/");
-					System.out.println(stringArray[0]);
-					System.out.println(stringArray[1]);
-					System.out.println(stringArray[2]);
 					oDate = new OCCCDate(Integer.valueOf(stringArray[1]), Integer.valueOf(stringArray[0]), 
 							Integer.valueOf(stringArray[2]));
-					if(personButton.isSelected()) {
-						personList.add(new OCCCPerson(firstNameField.getText(), lastNameField.getText(), oDate,
-								"null", "null"));
-					} else if(rPersonButton.isSelected()) {
-						personList.add(new OCCCPerson(firstNameField.getText(), lastNameField.getText(), oDate,
-								govIDField.getText(), "null"));
-					} else if(oPersonButton.isSelected()) {
-						personList.add(new OCCCPerson(firstNameField.getText(), lastNameField.getText(), oDate,
-								govIDField.getText(), OCCCIDField.getText()));
-						
-						try{
-						    ObjectOutputStream objectOutputStream = new ObjectOutputStream(new FileOutputStream(fileName+".dat", false)); 
-
-						    objectOutputStream.writeObject(personList);
-						    objectOutputStream.close();
-
-						} catch (IOException b) {
-						    b.printStackTrace();
-						}
+					
+					if(numInList == personList.size()) {
+						personList.add(new OCCCPerson("null", "null", oDate, "null", "null"));
 					}
+					if(personButton.isSelected()) {
+						personList.get(numInList+1).setFirstName(firstNameField.getText());
+						personList.get(numInList+1).setLastName(lastNameField.getText());
+					} else if(rPersonButton.isSelected()) {
+						personList.get(numInList+1).setFirstName(firstNameField.getText());
+						personList.get(numInList+1).setLastName(lastNameField.getText());
+						personList.get(numInList+1).setGovernmentID(govIDField.getText());
+					} else if(oPersonButton.isSelected()) {
+						personList.get(numInList+1).setFirstName(firstNameField.getText());
+						personList.get(numInList+1).setLastName(lastNameField.getText());
+						personList.get(numInList+1).setGovernmentID(govIDField.getText());
+						personList.get(numInList+1).setStudentID(OCCCIDField.getText());
+					}
+					
+					try{
+					    ObjectOutputStream objectOutputStream = new ObjectOutputStream(new FileOutputStream("output", false)); 
+
+					    objectOutputStream.writeObject(personList);
+					    objectOutputStream.close();
+
+					} catch (IOException b) {
+					    b.printStackTrace();
+					}
+					
+					firstNameField.setText(null);
+					lastNameField.setText(null);
+					birthdateField.setText(null);
+					govIDField.setText(null);
+					OCCCIDField.setText(null);
+					
+					model.clear();
+					for(int i = 0; i < personList.size(); i ++) {
+						model.addElement(personList.get(i).toString());
+					}
+					JList.setModel(model);
+					
+					numInList = personList.size();
+					
 				} else {
 					JOptionPane.showMessageDialog(null, "You entered an invalid date, try again in mm/dd/yyyy format","Error", JOptionPane.ERROR_MESSAGE);
 				}				
 			}
 		});	
 		
+		//Save button
+		saveAsButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				String name = (String)JOptionPane.showInputDialog(null, "Enter file name", "Save As", 
+						JOptionPane.WARNING_MESSAGE);
+				try{
+				    ObjectOutputStream objectOutputStream = new ObjectOutputStream(new FileOutputStream(fileName, false)); 
+				    ObjectInputStream objectInputStream = new ObjectInputStream(new FileInputStream(name));
+				    
+				    objectOutputStream.writeObject(objectInputStream);
+				    objectOutputStream.close();
+
+				} catch (IOException b) {
+				    b.printStackTrace();
+				}
+				firstNameField.setText(null);
+				lastNameField.setText(null);
+				birthdateField.setText(null);
+				govIDField.setText(null);
+				OCCCIDField.setText(null);
+			}
+		});
+		
+		//Help button gives some amount of help
+		cancelButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				firstNameField.setText(null);
+				lastNameField.setText(null);
+				birthdateField.setText(null);
+				govIDField.setText(null);
+				OCCCIDField.setText(null);
+			}
+		});
+		
 		//Open file button
 		openButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				JFileChooser fileChooser = new JFileChooser();
-				FileNameExtensionFilter filter = new FileNameExtensionFilter("Supported file types","txt");
-				fileChooser.setFileFilter(filter);
 			    int returnVal = fileChooser.showOpenDialog(frame);
 			    if(returnVal == JFileChooser.APPROVE_OPTION) {
-			       fileName = fileChooser.getSelectedFile().getName();
+			       fileName = fileChooser.getSelectedFile().getPath();
+			       personList.clear();
+			       ObjectInputStream objectInputStream;
+				try {
+					objectInputStream = new ObjectInputStream(new FileInputStream(fileChooser.getSelectedFile().getPath()));
+					try {
+						personList = (ArrayList<OCCCPerson>) objectInputStream.readObject();
+					} catch (ClassNotFoundException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
+					
+					objectInputStream.close();
+					
+				} catch (FileNotFoundException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				} catch (IOException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				} 
+			       
 			    }
+			    model.clear();
+				for(int i = 0; i < personList.size(); i ++) {
+					model.addElement(personList.get(i).toString());
+				}
+				JList.setModel(model);
 			}
 		});	
 		
@@ -219,9 +329,29 @@ public class PersonApplicationGUI implements ActionListener{
 				} catch (IOException b) {
 				    b.printStackTrace();
 				}
+				
+				model.clear();
+				for(int i = 0; i < personList.size(); i ++) {
+					model.addElement(personList.get(i).toString());
+				}
+				JList.setModel(model);
+				
+				firstNameField.setText(null);
+				lastNameField.setText(null);
+				birthdateField.setText(null);
+				govIDField.setText(null);
+				OCCCIDField.setText(null);
 			}
 		});	
-				
+
+		//Create new file button
+		newFileButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				fileName = (String)JOptionPane.showInputDialog(null, "Enter file name", "New file", 
+						JOptionPane.WARNING_MESSAGE);
+			}
+		});
+		
 		frame.setJMenuBar(menuBar);
         frame.setVisible(true);
         
